@@ -24,4 +24,12 @@ func main() {
 	fmt.Printf("myslice = %v\n", myslice)
 	fmt.Printf("length = %d\n", len(myslice))
 	fmt.Printf("capacity = %d\n", cap(myslice))
+
+	s := [3]int{1, 2, 3}
+	fmt.Println(len(s), cap(s))
+	s1 := s[0:1]
+	fmt.Println(len(s1), cap(s1))
+	s1 = append(s1, 5)
+	fmt.Println(s1)
+	fmt.Println(s)
 }
