@@ -16,11 +16,13 @@ func main() {
 	}
 	fmt.Println(sum)
 
-	// runs forever
-	//for {
-	//
-	//}
+	for {
+		fmt.Println("loop")
+		break
+	}
 
-	//
+	for i := range 3 {
+		fmt.Println(i)
+	}
 
 }
