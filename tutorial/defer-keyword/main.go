@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+// defer guarantees execution even panic occurs
 func demonstrateOrder() {
 	defer fmt.Println("First deferred")  // 1.
 	defer fmt.Println("Second deferred") // 3.
