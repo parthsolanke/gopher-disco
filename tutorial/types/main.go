@@ -27,6 +27,7 @@ func handleWithAssertion(x interface{}) {
 func handleWithTypeSwitch(x interface{}) {
 	fmt.Println("Using Type Switch:")
 
+	// .(type) only allowed in type switch
 	switch v := x.(type) {
 	case string:
 		fmt.Println("It's a string:", v)
