@@ -2,6 +2,7 @@ package main
 
 import "fmt"
 
+// clarity: a pointer is nothing but a memory location
 // &i gives you the address (pointer) to the var
 // *T will be the type of var you store the address (pointer) eg: var ptr *int = &i
 // *ptr is used to dereference the pointer and access the value of it
