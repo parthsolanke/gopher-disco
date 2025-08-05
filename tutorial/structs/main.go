@@ -2,6 +2,17 @@ package main
 
 import "fmt"
 
+// A and B are different type! as order of the fields is concerned
+//type A struct {
+//	X int
+//	Y int
+//}
+//
+//type B struct {
+//	Y int
+//	X int
+//}
+
 // structs are mutabel
 type Person struct {
 	name string
