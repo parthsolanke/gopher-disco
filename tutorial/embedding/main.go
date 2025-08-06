@@ -11,6 +11,7 @@ func (c Car) describe() {
 }
 
 // struct embedding, which is Go's alternative to inheritance.
+// using embedding in go methods are also promoted
 
 type Truck struct {
 	Car     // Embedded struct, fields in Car now are the part of Truck
