@@ -1,168 +1,157 @@
-## 🧠 MASTERING GO FUNDAMENTALS — PRACTICE SET
+## **Stage 1 – Warm-Up: Goroutines Basics**
 
-### 🟢 LEVEL 1: Foundations & Flow
+### Tasks:
 
----
+1. **Hello Goroutine**
+   Write a program that:
 
-### **1. Student Grader**
+  * Starts 5 goroutines, each printing `"Hello from Goroutine X"`.
+  * The main function waits for them to finish without using `time.Sleep` (hint: `sync.WaitGroup`).
 
-🧩 **Concepts**: Input/output, variables, conditionals, switch, formatting
-📌 **Task**:
+2. **Concurrent Countdown**
 
-* Input a student's name and marks for 3 subjects.
-* Compute average and assign grades using `switch`.
-* Print a summary like:
+  * Have 3 goroutines each count down from 5 to 1, with a small random delay.
+  * Observe the interleaving of prints.
 
-  ```
-  Name: Raj | Avg: 72.33 | Grade: B
-  ```
+3. **Parallel Square Calculator**
 
-🔁 Bonus: Accept input in a loop till user types `exit`.
-
----
-
-### **2. Prime Number Checker**
-
-🧩 **Concepts**: `for` loops, conditionals, return, function design
-📌 **Task**:
-
-* Write a function `isPrime(n int) bool`
-* Take user input for a number, print whether it's prime.
-* Use it inside a loop that checks primes from 1 to 100.
-
-⚙️ Optional: Add a recursive variant.
+  * Given an array of numbers, spawn a goroutine for each number that computes its square.
+  * Collect and print results.
 
 ---
 
-### **3. Shopping Cart Calculator**
+## **Stage 2 – Channels Mastery**
 
-🧩 **Concepts**: variables, loops, `range`, function with multiple return values
-📌 **Task**:
+Goal: Master unbuffered, buffered, and directional channels.
 
-* Given a slice of prices, write a function:
+### Tasks:
 
-  ```go
-  func totalCost(prices []float64) (float64, int)
-  ```
-* It should return total cost and number of items.
-* Use `range` to loop over the slice.
+4. **Ping-Pong** *(Unbuffered)*
 
----
+  * Two goroutines play "ping-pong" by sending/receiving a string through a channel 10 times.
 
-## 🟡 LEVEL 2: Functions & Flow Composition
+5. **Batch Logger** *(Buffered)*
 
----
+  * Buffered channel stores log messages from multiple goroutines.
+  * A single logger goroutine reads from it and prints messages.
 
-### **4. Password Strength Evaluator**
+6. **One-Way Streets** *(Directional)*
 
-🧩 **Concepts**: string operators, if-else, functions, multiple return values
-📌 **Task**:
-
-* Write a function:
-
-  ```go
-  func checkStrength(pwd string) (int, string)
-  ```
-* Score based on:
-
-    * Length
-    * Presence of digits/symbols/uppercase
-* Return score and comment ("Weak", "Strong", etc.)
+  * Implement a producer goroutine (send-only channel) that generates numbers 1–10.
+  * Consumer goroutine (receive-only channel) sums them up.
 
 ---
 
-### **5. Number Series Generator**
+## **Stage 3 – Select Statement Skills**
 
-🧩 **Concepts**: variadic function, recursion, slice ops
-📌 **Task**:
+Goal: Handle multiple channels and timeouts.
 
-* Write `generateSeries(start int, steps ...int) []int`
-* It should return a series where each number is:
+### Tasks:
 
-  ```go
-  next = previous + step[i % len(steps)]
-  ```
-* Example:
+7. **Racing Goroutines**
 
-  ```go
-  generateSeries(1, 2, 3) → [1, 3, 6, 8, 11, ...]
-  ```
+  * Start two goroutines that each complete after a random time (1–3 sec).
+  * Use `select` to print whichever finishes first.
 
----
+8. **Timeout Fetcher**
 
-### **6. Simple CSV Parser**
+  * Simulate fetching data from a service (sleep 1–5 sec).
+  * If it takes more than 3 seconds, print `"Timeout"`.
 
-🧩 **Concepts**: string splitting, `range`, `defer`, file I/O (optional)
-📌 **Task**:
+9. **Multi-Source Data**
 
-* Parse a simulated CSV like:
-
-  ```go
-  "Alice,89\nBob,76\nCharlie,92"
-  ```
-* Output:
-
-  ```go
-  Alice got 89
-  ```
-* Defer closing file (optional: read from file using `os.Open`)
+  * Simulate receiving weather updates from 3 sensors via 3 channels.
+  * Use `select` in a loop to process whichever update arrives first.
 
 ---
 
-## 🔴 LEVEL 3: Combined Concepts & Design Thinking
+## **Stage 4 – Coordination Patterns**
+
+Goal: Learn common concurrency patterns in Go.
+
+### Tasks:
+
+10. **Worker Pool**
+
+  * Implement a pool of N worker goroutines that process jobs from a channel.
+  * When all jobs are done, stop the workers.
+
+11. **Pipeline**
+
+  * Stage 1: Generate numbers 1–20.
+  * Stage 2: Filter even numbers.
+  * Stage 3: Square them.
+  * Each stage is its own goroutine, connected via channels.
+
+12. **Fan-In**
+
+  * Have two goroutines produce messages at different intervals.
+  * Merge them into a single channel and print all messages.
+
+13. **Fan-Out**
+
+  * One producer sends jobs to multiple worker goroutines for parallel processing.
 
 ---
 
-### **7. Bank Account System (In-Memory)**
+## **Stage 5 – Real-World Mini Projects**
 
-🧩 **Concepts**: struct (when you're ready), switch, functions, defer
-📌 **Task**:
+Goal: Combine everything.
 
-* Create a CLI-like system:
+### Mini Projects:
 
-    * `deposit(amount)`
-    * `withdraw(amount)`
-    * `checkBalance()`
-* Use switch for command routing
-* Protect against overdrafts
+14. **Concurrent Web Scraper**
 
----
+  * Fetch 5 URLs concurrently.
+  * Print the status code and time taken for each.
 
-### **8. Fibonacci Calculator (Iterative + Recursive)**
+15. **Chat Room Simulation**
 
-🧩 **Concepts**: recursion, loops, `defer`, benchmarking logic
-📌 **Task**:
+  * Multiple “users” (goroutines) send messages to a central chat room.
+  * The chat room broadcasts messages to all connected users (fan-out).
 
-* Write:
+16. **Stock Price Monitor**
 
-  ```go
-  func fibRec(n int) int
-  func fibIter(n int) int
-  ```
-* Print and compare their outputs
-* Optionally, time the functions and `defer` the print of elapsed time
+  * Three simulated APIs send stock updates.
+  * Use `select` to process updates in real-time and log them.
 
----
+17. **Race Between Services** *(Like API fallbacks)*
 
-### **9. Math Expression Evaluator**
+  * Query two simulated services for the same data.
+  * Use whichever responds first, cancel the slower one.
 
-🧩 **Concepts**: switch, string input, parsing, function dispatch
-📌 **Task**:
+18. **Concurrent File Search**
 
-* Input: `add 3 4` or `mul 2 5`
-* Output: `7` or `10`
-* Route to correct function using `switch` or map of functions.
+  * Search for a keyword in multiple files concurrently.
+  * Report matches as they are found.
 
 ---
 
-### **10. Command Line Contact Book (Bonus Project)**
+## **Stage 6 – Extreme Challenges**
 
-🧩 **Concepts**: CLI args, loop, map, functions, I/O
-📌 **Features**:
+Goal: Push Go’s concurrency to the limit.
 
-* Add contact (`add John 12345`)
-* Search contact (`search John`)
-* List all contacts
-* Use loop and `switch` for command dispatch
+### Advanced:
+
+19. **100,000 Goroutines Stress Test**
+
+  * Start 100k goroutines doing small tasks.
+  * Measure memory usage.
+
+20. **Rate Limiter with Channels**
+
+  * Limit function execution to 5 calls per second using a ticker channel.
+
+21. **Deadlock Detector** *(Deliberate bug)*
+
+  * Write a program that deadlocks.
+  * Then fix it using correct channel/goroutine logic.
 
 ---
+
+## Practice Approach
+
+* **Start small** → don’t jump to projects until you master Stage 1–2.
+* **No `time.Sleep` unless simulating work** → use `sync.WaitGroup` or channel signals for coordination.
+* **Instrument your code** → print goroutine IDs or timestamps to see concurrency in action.
+* **Refactor for clarity** → concurrency mistakes hide in messy code.
