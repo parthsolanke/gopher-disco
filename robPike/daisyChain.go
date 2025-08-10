@@ -4,7 +4,7 @@ import "fmt"
 
 // l -> r -> ... (adding 1 in each chain)
 func main() {
-	n := 1000
+	n := 10000
 	leftmost := make(chan int)
 
 	left := leftmost
@@ -17,8 +17,9 @@ func main() {
 	}
 
 	// invoke the chain
-	go func() {
-		leftmost <- 1
-	}()
+	go func(c chan int) {
+		c <- 1
+	}(leftmost)
+
 	fmt.Println(<-left) // result
 }
