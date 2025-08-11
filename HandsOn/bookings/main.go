@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"math/rand"
 	"sync"
 )
 
@@ -32,7 +31,7 @@ func (c *Concert) book(id int) {
 
 	c.tickets[id].isSold = true
 	c.totalTickets--
-	fmt.Printf("booked ticket %d successfully.\n", id)
+	fmt.Printf("booked ticket %d successfully, remaining tickets: %d\n", id, c.totalTickets)
 }
 
 func worker(id int, jobs <-chan int, c *Concert, wg *sync.WaitGroup) {
@@ -66,8 +65,8 @@ func main() {
 	}
 
 	// create jobs
-	for i := 0; i < 80; i++ {
-		jobs <- rand.Intn(numTickets)
+	for i := range numTickets {
+		jobs <- i
 	}
 	close(jobs)
 
