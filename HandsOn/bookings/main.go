@@ -43,7 +43,7 @@ func worker(id int, jobs <-chan int, c *Concert, wg *sync.WaitGroup) {
 }
 
 func main() {
-	numTickets := 100
+	numTickets := 1000000
 	myTickets := make([]Ticket, numTickets)
 	for i := range numTickets {
 		myTickets[i] = Ticket{id: i}
@@ -54,7 +54,7 @@ func main() {
 		totalTickets: numTickets,
 	}
 
-	const numWorkers = 5
+	const numWorkers = 1000
 	jobs := make(chan int, 20)
 	var wg sync.WaitGroup
 
