@@ -7,7 +7,7 @@ import (
 	"time"
 )
 
-const STOCK_PRICE = 23.58
+const StockPrice = 23.58
 
 func getPriceService(ctx context.Context, name string) <-chan float64 {
 	priceCh := make(chan float64)
@@ -17,9 +17,9 @@ func getPriceService(ctx context.Context, name string) <-chan float64 {
 		delay := time.Duration(rand.Intn(1000)) * time.Millisecond
 		select {
 		case <-time.After(delay):
-			priceCh <- STOCK_PRICE
+			priceCh <- StockPrice
 		case <-ctx.Done():
-			// Cancelled, don't send anything
+			// Canceled, don't send anything
 			return
 		}
 	}()
@@ -28,8 +28,6 @@ func getPriceService(ctx context.Context, name string) <-chan float64 {
 }
 
 func main() {
-	rand.Seed(time.Now().UnixNano())
-
 	ctx, cancel := context.WithCancel(context.Background())
 	defer cancel() // Ensure all goroutines are cleaned up
 
