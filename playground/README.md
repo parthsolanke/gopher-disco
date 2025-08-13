@@ -1,157 +1,104 @@
-## **Stage 1 – Warm-Up: Goroutines Basics**
+## **Go Concurrency Practice Problems**
 
-### Tasks:
+### **1. Coffee Shop Order System** *(Goroutines + Unbuffered Channels)*
 
-1. **Hello Goroutine**
-   Write a program that:
+**Scenario:**
+You’re building a coffee shop simulator. Each customer places an order, and the barista prepares it.
+**Requirements:**
 
-  * Starts 5 goroutines, each printing `"Hello from Goroutine X"`.
-  * The main function waits for them to finish without using `time.Sleep` (hint: `sync.WaitGroup`).
-
-2. **Concurrent Countdown**
-
-  * Have 3 goroutines each count down from 5 to 1, with a small random delay.
-  * Observe the interleaving of prints.
-
-3. **Parallel Square Calculator**
-
-  * Given an array of numbers, spawn a goroutine for each number that computes its square.
-  * Collect and print results.
+* Each order is handled in its own goroutine.
+* Orders are sent through an **unbuffered channel** from customers to barista.
+* The barista confirms each completed drink back via another channel.
+* Stop the simulation after serving 5 customers.
 
 ---
 
-## **Stage 2 – Channels Mastery**
+### **2. Log Processing System** *(Buffered Channels + Goroutines)*
 
-Goal: Master unbuffered, buffered, and directional channels.
+**Scenario:**
+A web server produces log messages faster than they can be processed.
+**Requirements:**
 
-### Tasks:
-
-4. **Ping-Pong** *(Unbuffered)*
-
-  * Two goroutines play "ping-pong" by sending/receiving a string through a channel 10 times.
-
-5. **Batch Logger** *(Buffered)*
-
-  * Buffered channel stores log messages from multiple goroutines.
-  * A single logger goroutine reads from it and prints messages.
-
-6. **One-Way Streets** *(Directional)*
-
-  * Implement a producer goroutine (send-only channel) that generates numbers 1–10.
-  * Consumer goroutine (receive-only channel) sums them up.
+* Use a **buffered channel** to store logs temporarily.
+* A single processor goroutine consumes logs from the channel and prints them.
+* Simulate producers generating logs at random intervals, and consumer processing slower.
+* Stop after 20 logs.
 
 ---
 
-## **Stage 3 – Select Statement Skills**
+### **3. Stock Price Aggregator** *(Select + Timeouts)*
 
-Goal: Handle multiple channels and timeouts.
+**Scenario:**
+You need to get a stock’s price from **3 different APIs** (simulated by goroutines with random delays).
+**Requirements:**
 
-### Tasks:
-
-7. **Racing Goroutines**
-
-  * Start two goroutines that each complete after a random time (1–3 sec).
-  * Use `select` to print whichever finishes first.
-
-8. **Timeout Fetcher**
-
-  * Simulate fetching data from a service (sleep 1–5 sec).
-  * If it takes more than 3 seconds, print `"Timeout"`.
-
-9. **Multi-Source Data**
-
-  * Simulate receiving weather updates from 3 sensors via 3 channels.
-  * Use `select` in a loop to process whichever update arrives first.
+* Use **`select`** to listen for the first API to respond.
+* If no API responds within 2 seconds, print “Timeout”.
+* Cancel the slower API calls once you have the result.
 
 ---
 
-## **Stage 4 – Coordination Patterns**
+### **4. Image Downloader** *(WaitGroup)*
 
-Goal: Learn common concurrency patterns in Go.
+**Scenario:**
+You have a list of image URLs to download.
+**Requirements:**
 
-### Tasks:
-
-10. **Worker Pool**
-
-  * Implement a pool of N worker goroutines that process jobs from a channel.
-  * When all jobs are done, stop the workers.
-
-11. **Pipeline**
-
-  * Stage 1: Generate numbers 1–20.
-  * Stage 2: Filter even numbers.
-  * Stage 3: Square them.
-  * Each stage is its own goroutine, connected via channels.
-
-12. **Fan-In**
-
-  * Have two goroutines produce messages at different intervals.
-  * Merge them into a single channel and print all messages.
-
-13. **Fan-Out**
-
-  * One producer sends jobs to multiple worker goroutines for parallel processing.
+* Launch a goroutine per download.
+* Use **`sync.WaitGroup`** to wait for all downloads to finish.
+* Print “All downloads completed” at the end.
+* Simulate downloads with `time.Sleep` for different durations.
 
 ---
 
-## **Stage 5 – Real-World Mini Projects**
+### **5. Bank Account System** *(Mutex for Data Safety)*
 
-Goal: Combine everything.
+**Scenario:**
+A bank account is shared by multiple users depositing and withdrawing money.
+**Requirements:**
 
-### Mini Projects:
-
-14. **Concurrent Web Scraper**
-
-  * Fetch 5 URLs concurrently.
-  * Print the status code and time taken for each.
-
-15. **Chat Room Simulation**
-
-  * Multiple “users” (goroutines) send messages to a central chat room.
-  * The chat room broadcasts messages to all connected users (fan-out).
-
-16. **Stock Price Monitor**
-
-  * Three simulated APIs send stock updates.
-  * Use `select` to process updates in real-time and log them.
-
-17. **Race Between Services** *(Like API fallbacks)*
-
-  * Query two simulated services for the same data.
-  * Use whichever responds first, cancel the slower one.
-
-18. **Concurrent File Search**
-
-  * Search for a keyword in multiple files concurrently.
-  * Report matches as they are found.
+* Use **`sync.Mutex`** to ensure only one goroutine updates the balance at a time.
+* Simulate multiple deposits and withdrawals running concurrently.
+* Print the final balance after all operations complete.
 
 ---
 
-## **Stage 6 – Extreme Challenges**
+### **6. Read-Mostly Cache** *(RWMutex)*
 
-Goal: Push Go’s concurrency to the limit.
+**Scenario:**
+You have a shared product catalog that is **read** frequently but **updated** rarely.
+**Requirements:**
 
-### Advanced:
+* Use **`sync.RWMutex`** so multiple goroutines can read simultaneously, but writes block reads and other writes.
+* Simulate:
 
-19. **100,000 Goroutines Stress Test**
-
-  * Start 100k goroutines doing small tasks.
-  * Measure memory usage.
-
-20. **Rate Limiter with Channels**
-
-  * Limit function execution to 5 calls per second using a ticker channel.
-
-21. **Deadlock Detector** *(Deliberate bug)*
-
-  * Write a program that deadlocks.
-  * Then fix it using correct channel/goroutine logic.
+   * Many readers fetching product prices.
+   * An occasional writer updating a price.
+* Ensure data remains consistent.
 
 ---
 
-## Practice Approach
+### **7. Video Encoding Farm** *(Worker Pool + WaitGroup)*
 
-* **Start small** → don’t jump to projects until you master Stage 1–2.
-* **No `time.Sleep` unless simulating work** → use `sync.WaitGroup` or channel signals for coordination.
-* **Instrument your code** → print goroutine IDs or timestamps to see concurrency in action.
-* **Refactor for clarity** → concurrency mistakes hide in messy code.
+**Scenario:**
+You run a video encoding service with many jobs but want to limit concurrent encodings to 3 at a time.
+**Requirements:**
+
+* Implement a **worker pool** with a fixed number of workers (goroutines).
+* Use a **job channel** to queue videos.
+* Each worker processes jobs and sends results to a results channel.
+* Use **WaitGroup** to wait until all videos are processed.
+
+---
+
+### **8. Real-Time Chat Server** *(Context + Multiple Concepts Combined)*
+
+**Scenario:**
+Build a mini chat server where multiple clients can send messages until a **context timeout** stops the server.
+**Requirements:**
+
+* Use **goroutines** for each client connection.
+* Use a **channel** for broadcasting messages.
+* Use **select** to handle multiple message channels.
+* Use **`context.WithTimeout`** to automatically shut down after 10 seconds.
+* Gracefully stop all goroutines when context is done.
